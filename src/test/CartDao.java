@@ -9,12 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import test.AuthorVo;
-import test.BookVo;
-
-public class BookDao {
+public class CartDao {
 	
-	public int insert( BookVo vo ) {
+	public int insert( CartVo vo ) {
 		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -28,16 +25,15 @@ public class BookDao {
 			
 			//3. statement 준비
 			String sql =
-            "insert into book values(seq_book.nextval, ?, ?,?, ?,?,?)";
+            "insert into cart values(?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩
-			pstmt.setString( 1, vo.getTitle() );
-			pstmt.setInt( 2, vo.getRate() );
-			pstmt.setInt( 3, vo.getStatus() );
+			pstmt.setInt( 1, vo.getCount() );
+			pstmt.setLong(2 , vo.getBookNo() );
+			pstmt.setLong( 3, vo.getMemberNo() );
 			pstmt.setInt(4,vo.getPrice());
-			pstmt.setLong( 5, vo.getAuthorNo() );
-			pstmt.setLong(6,vo.getCategoryNo());
+			
 			
 			//5. query 실행
 			count = pstmt.executeUpdate();
@@ -63,8 +59,12 @@ public class BookDao {
 		
 		return count;
 	}
-	public List<BookVo> getList() {
-		List<BookVo> list = new ArrayList<BookVo>();
+	
+	
+	
+	
+	public List<CartVo> getList() {
+		List<CartVo> list = new ArrayList<CartVo>();
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -82,27 +82,21 @@ public class BookDao {
 			
 			//4. SQL문 실행
 			String sql =
-					"select no, title, rate, status, price, author_no, category_no from book";
+					"select b.TITLE,a.count,a.PRICE from cart a, book b where b.NO=a.BOOK_NO";
 			rs = stmt.executeQuery(sql);
 			
 			//5. 결과 처리
 			while( rs.next() ) {
-				Long no = rs.getLong( 1 );
-				String title =rs.getString(2);
-				Integer rate =rs.getInt(3);
-				Integer status=rs.getInt(4);
-				Integer price =rs.getInt(5);
-				Long authorNo =rs.getLong(6);
-				Long categoryNo=rs.getLong(7);
+				String title=rs.getString(1);
+				Integer count = rs.getInt(2);
+				Integer price= rs.getInt(3);
+				
 
-				BookVo vo = new BookVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setRate(rate);
-				vo.setStatus(status);
+				CartVo vo = new CartVo();
+				vo.setCount(count);
+				vo.setBookName(title);
 				vo.setPrice(price);
-				vo.setAuthorNo(authorNo);
-				vo.setCategoryNo(categoryNo);
+				
 				list.add( vo );
 			}
 		} catch (ClassNotFoundException e) {
@@ -130,4 +124,6 @@ public class BookDao {
 		
 		return list;
 	}
+
+
 }

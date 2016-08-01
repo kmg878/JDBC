@@ -8,7 +8,21 @@ public class BookVo {
 	private Long authorNo;
 	private Integer status;
 	private String authorName;
+	private Integer price;
+	private Long categoryNo;
 	
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	public Long getCategoryNo() {
+		return categoryNo;
+	}
+	public void setCategoryNo(Long categoryNo) {
+		this.categoryNo = categoryNo;
+	}
 	public String getAuthorName() {
 		return authorName;
 	}
@@ -48,8 +62,10 @@ public class BookVo {
 	@Override
 	public String toString() {
 		return "BookVo [no=" + no + ", title=" + title + ", rate=" + rate + ", authorNo=" + authorNo + ", status="
-				+ status + ", authorName=" + authorName + "]";
+				+ status + ", authorName=" + authorName + ", price=" + price + ", categoryNo=" + categoryNo + "]";
 	}
+	
+	
 	
 
 	
